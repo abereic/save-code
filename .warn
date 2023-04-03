@@ -1,0 +1,24 @@
+// keep a record of warnings
+const warnings = new Map();
+
+// listen for incoming messages
+client.on('message', async (message) => {
+  // check if the message is a command for warning a user
+  if (message.body.startsWith('.warn ')) {
+    const groupName = message.chat.name;
+    const member = message.mentionedIds[0];
+
+    // increment the number of warnings for the user
+    warnings.set(member, (warnings.get(member) || 0) + 1);
+    
+    // check the number of warnings
+    if (warnings.get(member) >= 3) {
+      // kick the user from the group
+      await client.removeParticipant(message.chat.id, member);
+      await client.sendMessage(message.chat.id, `User has been kicked from ${groupName}`);
+    } else {
+      // warn the user
+      await client.sendMessage(message.chat.id, `User has been warned for inappropriate behavior. This is warning number ${warnings.get(member)}.`);
+    }
+  }
+});
