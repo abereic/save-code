@@ -1,0 +1,63 @@
+const { Client } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
+const express = require('express');
+const session = require('express-session');
+const open = require('open');
+const { exec } = require('child_process');
+
+// Initialize the WhatsApp client
+const client = new Client({
+    session: sessionData,
+});
+
+// Connect the client to WhatsApp
+client.initialize();
+
+// Initialize the Express app
+const app = express();
+
+// Enable session management
+app.use(session({
+    secret: 'my-secret-key',
+    resave: false,
+    saveUninitialized: false,
+}));
+
+// Define a route to trigger the code editor
+app.get('/edit', (req, res) => {
+    // Get the session ID from the request parameters
+    const sessionId = req.query.sessionId;
+
+    // Open the remote session in Visual Studio Code
+    exec(`code-insiders --remote ssh-remote+${sessionId}`, (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error opening remote session: ${err.message}`);
+            res.status(500).send('Error opening remote session');
+        } else {
+            console.log(`Remote session opened: ${stdout}`);
+            res.send('Remote session opened');
+        }
+    });
+});
+
+// Define the .edit command handler
+client.on('message', async message => {
+    if (message.body === '.edit') {
+        // Get the session ID from the client object
+        const sessionId = client.getSessionId();
+
+        // Generate a QR code for the session ID
+        const qrCode = await qrcode.toDataURL(sessionId);
+
+        // Send the QR code to the user
+        await message.reply(new MessageMedia('image/png', qrCode));
+
+        // Open the remote session in the default browser
+        await open(`http://localhost:3000/edit?sessionId=${sessionId}`);
+    }
+});
+
+// Start the Express server
+app.listen(3000, () => {
+    console.log('Server started');
+});
