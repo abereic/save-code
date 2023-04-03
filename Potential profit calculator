@@ -1,0 +1,17 @@
+# Product details
+item_name = "Widget"
+buying_price = 10
+selling_price = 15
+
+# Fees and expenses
+selling_fees = 1.5
+shipping_cost = 2
+
+# Calculate profit
+profit = selling_price - buying_price - selling_fees - shipping_cost
+
+# Output result
+if profit > 0:
+    print("You can make a profit of $" + str(profit) + " per " + item_name + ".")
+else:
+    print("It's not profitable to sell " + item_name + " at this time.")
