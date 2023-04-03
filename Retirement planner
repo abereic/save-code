@@ -1,0 +1,10 @@
+# Function to plan for retirement
+def plan_for_retirement(age, income, current_savings):
+    retirement_goal = (income * 0.7) * (65 - age)
+    savings_needed = retirement_goal - current_savings
+    if savings_needed > 0:
+        years_needed = int(savings_needed / (income * 0.1))
+        plan = f"You need to save ${savings_needed} more for retirement. You should save {years_needed} years at 10% of your income."
+    else:
+        plan = "You are on track for retirement!"
+    return plan
