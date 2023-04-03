@@ -1,0 +1,16 @@
+// Define the .greet command
+const greetCommand = async (message) => {
+  const greetingText = `Hello, ${message.key.fromMe ? 'myself' : message.participant}! How can I assist you today?`;
+  await conn.sendMessage(message.key.remoteJid, greetingText, MessageType.text);
+};
+
+// Handle incoming messages and check for the .greet command
+conn.on('chat-update', async (chatUpdate) => {
+  if (chatUpdate.messages && chatUpdate.count) {
+    const message = chatUpdate.messages.all()[0];
+    const messageBody = message.message;
+    if (messageBody.body === '.greet') {
+      await greetCommand(message);
+    }
+  }
+});
