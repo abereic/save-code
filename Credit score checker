@@ -1,0 +1,11 @@
+# Function to check credit score
+def check_credit_score(credit_score):
+    if credit_score >= 800:
+        score_category = "Excellent"
+    elif credit_score >= 700:
+        score_category = "Good"
+    elif credit_score >= 600:
+        score_category = "Fair"
+    else:
+        score_category = "Poor"
+    return score_category
