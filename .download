@@ -1,0 +1,25 @@
+const axios = require('axios');
+const fs = require('fs');
+
+// listen for incoming messages
+client.on('message', async (message) => {
+  // check if the message is a command for downloading a file
+  if (message.body.startsWith('.download ')) {
+    const url = message.body.split(' ')[1];
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+
+    // download the file from the URL
+    const response = await axios.get(url, { responseType: 'stream' });
+    const stream = response.data.pipe(fs.createWriteStream(filename));
+
+    // wait for the file to finish downloading
+    await new Promise((resolve, reject) => {
+      stream.on('finish', resolve);
+      stream.on('error', reject);
+    });
+
+    // send the file to the user
+    const media = MessageMedia.fromFilePath(filename);
+    await client.sendMessage(message.from, media);
+  }
+});
