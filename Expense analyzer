@@ -1,0 +1,7 @@
+# Function to analyze expenses
+def analyze_expenses(expenses):
+    total_expenses = sum(expenses)
+    avg_expense = total_expenses / len(expenses)
+    max_expense = max(expenses)
+    min_expense = min(expenses)
+    return total_expenses, avg_expense, max_expense, min_expense
