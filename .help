@@ -1,0 +1,16 @@
+// Define the .help command
+const helpCommand = async (message) => {
+  const helpText = `Available commands:\n\n.help - Show this help message\n.greet - Greet the user\n.weather <location> - Get the current weather for a location\n.joke - Tell a random joke\n.translate <text> <target language> - Translate text to another language\n.quiz - Take a fun quiz\n.movie <title> - Get information about a movie\n.fortune - Get a random fortune\n.emoji <text> - Convert text to emojis\n.horoscope <sign> - Get your daily horoscope\n.trivia - Play a trivia game\n.image <url> - Get information about an image\n.ai <message> - Chat with an AI\n\nExample usage: .weather London`;
+  await conn.sendMessage(message.key.remoteJid, helpText, MessageType.text);
+};
+
+// Handle incoming messages and check for the .help command
+conn.on('chat-update', async (chatUpdate) => {
+  if (chatUpdate.messages && chatUpdate.count) {
+    const message = chatUpdate.messages.all()[0];
+    const messageBody = message.message;
+    if (messageBody.body === '.help') {
+      await helpCommand(message);
+    }
+  }
+});
