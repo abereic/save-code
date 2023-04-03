@@ -1,0 +1,33 @@
+// Import the required libraries
+const openai = require('openai');
+
+// Set up the OpenAI API credentials
+openai.apiKey = process.env.OPENAI_API_KEY;
+
+// Set up the WhatsApp connection
+const conn = new WAConnection();
+conn.connect();
+
+// Define a function to handle incoming messages
+conn.on('chat-update', async (chatUpdate) => {
+  // Check if the message is a new incoming message
+  if (chatUpdate.messages && chatUpdate.count) {
+    const message = chatUpdate.messages.all()[0];
+    const sender = message.key.remoteJid;
+    const text = message.message.conversation;
+
+    // Call the OpenAI API to generate a response
+    const prompt = `User: ${text}\nAI: `;
+    const completions = await openai.completions.create({
+      engine: 'davinci',
+      prompt: prompt,
+      maxTokens: 150,
+      n: 1,
+      stop: '\n',
+    });
+    const messageText = completions.choices[0].text.trim();
+
+    // Send the response back to the user on WhatsApp
+    conn.sendMessage(sender, messageText, MessageType.text);
+  }
+});
