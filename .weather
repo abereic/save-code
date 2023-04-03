@@ -1,0 +1,21 @@
+// Define the .weather command
+const weatherCommand = async (message) => {
+  const location = message.message.body.slice(9);
+  const apiKey = 'YOUR_API_KEY_HERE';
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const weatherText = `The current weather in ${location} is ${data.weather[0].description} with a temperature of ${data.main.temp}°C.`;
+  await conn.sendMessage(message.key.remoteJid, weatherText, MessageType.text);
+};
+
+// Handle incoming messages and check for the .weather command
+conn.on('chat-update', async (chatUpdate) => {
+  if (chatUpdate.messages && chatUpdate.count) {
+    const message = chatUpdate.messages.all()[0];
+    const messageBody = message.message;
+    if (messageBody.body.startsWith('.weather ')) {
+      await weatherCommand(message);
+    }
+  }
+});
