@@ -1,0 +1,92 @@
+const { WAConnection, MessageType } = require('@adiwajshing/baileys');
+const axios = require('axios');
+const jokeAPI = 'https://official-joke-api.appspot.com/random_joke';
+const movieAPI = 'https://api.themoviedb.org/3/search/movie';
+const movieAPIKey = 'your_movie_api_key_here';
+const weatherAPI = 'https://api.openweathermap.org/data/2.5/weather';
+const weatherAPIKey = 'your_weather_api_key_here';
+
+// Define your bot connection
+const conn = new WAConnection();
+// ... connect to WhatsApp ...
+
+// Command handler
+const handleCommand = async (msg) => {
+  const command = msg.body.split(' ')[0].toLowerCase();
+  switch (command) {
+    case '.joke':
+      sendRandomJoke(msg.from);
+      break;
+    case '.fortune':
+      sendRandomFortune(msg.from);
+      break;
+    case '.translate':
+      translateText(msg.from, msg.body.split(' ')[1], msg.body.split(' ')[2]);
+      break;
+    case '.emojify':
+      emojifyText(msg.from, msg.body.split(' ')[1]);
+      break;
+    case '.weather':
+      getWeatherUpdate(msg.from);
+      break;
+    case '.movie':
+      searchForMovie(msg.from, msg.body.substring(7));
+      break;
+    case '.horoscope':
+      generateHoroscope(msg.from, msg.body.split(' ')[1]);
+      break;
+    case '.quiz':
+      runPersonalityQuiz(msg.from, msg.author);
+      break;
+    case '.trivia':
+      playTriviaGame(msg.from);
+      break;
+    // Handle other commands...
+    default:
+      conn.sendMessage(msg.from, 'Unknown command. Type ".help" for a list of available commands.', MessageType.text);
+  }
+}
+
+// Functions for each command
+const sendRandomJoke = async (chatId) => {
+  try {
+    const res = await axios.get(jokeAPI);
+    const { setup, punchline } = res.data;
+    const joke = `${setup}\n\n${punchline}`;
+    conn.sendMessage(chatId, joke, MessageType.text);
+  } catch (error) {
+    console.log(error);
+    conn.sendMessage(chatId, 'Failed to retrieve a joke. Please try again later.', MessageType.text);
+  }
+}
+
+const sendRandomFortune = async (chatId) => {
+  // Generate a random fortune
+  const fortuneList = ['A beautiful, smart, and loving person will be coming into your life.',
+    'A dubious friend may be an enemy in camouflage.',
+    'A faithful friend is a strong defense.',
+    //... and so on
+  ];
+  const randomFortune = fortuneList[Math.floor(Math.random() * fortuneList.length)];
+  conn.sendMessage(chatId, randomFortune, MessageType.text);
+}
+
+const translateText = async (chatId, sourceLang, targetLang, text) => {
+  // Use a language translation API to translate text
+  // ...
+  conn.sendMessage(chatId, `Translated text: ${translatedText}`, MessageType.text);
+}
+
+const emojifyText = async (chatId, text) => {
+  // Use an emoji API to convert text to emojis
+  // ...
+  conn.sendMessage(chatId, `Emojified text: ${emojifiedText}`, MessageType.text);
+}
+
+const getWeatherUpdate = async (chatId, location) => {
+  // Use a weather API to get the weather update for a location
+  // ...
+  conn.sendMessage(chatId, `Weather update for ${location}: ${weatherUpdate}`, MessageType.text);
+}
+
+const searchForMovie = async
