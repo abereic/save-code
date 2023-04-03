@@ -1,0 +1,3 @@
+// Define the .joke command
+const jokeCommand = async (message) => {
+  const response = await fetch('https
