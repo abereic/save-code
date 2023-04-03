@@ -1,0 +1,9 @@
+# Function to provide investment advice
+def provide_investment_advice(investment_amount):
+    if investment_amount >= 10000:
+        advice = "Consider investing in a diversified portfolio of stocks and bonds."
+    elif investment_amount >= 5000:
+        advice = "Consider investing in a high-yield savings account or a CD."
+    else:
+        advice = "Consider saving more before investing."
+    return advice
