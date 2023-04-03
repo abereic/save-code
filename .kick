@@ -1,0 +1,25 @@
+// listen for incoming messages
+client.on('message', async (message) => {
+  // check if the message is a command for kicking a user
+  if (message.body.startsWith('.kick ')) {
+    const groupName = message.chat.name;
+    const member = message.mentionedIds[0];
+    const group = await client.getChatById(message.chat.id);
+    
+    // check if the user is an admin
+    if (!group.isGroupAdminsOnly) {
+      await client.sendMessage(message.from, `You need to be an admin to use this command.`);
+      return;
+    }
+
+    // check if the user is a member of the group
+    if (!group.participants.includes(member)) {
+      await client.sendMessage(message.from, `The user is not a member of this group.`);
+      return;
+    }
+
+    // kick the user from the group
+    await client.removeParticipant(message.chat.id, member);
+    await client.sendMessage(message.chat.id, `User has been kicked from ${groupName}`);
+  }
+});
