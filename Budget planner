@@ -1,0 +1,7 @@
+# Function to plan a budget
+def plan_budget(income, expenses):
+    savings = income - expenses
+    if savings >= 0.2 * income:
+        budget_plan = "You are doing great! You have a good amount of money left over for savings and investments."
+    elif savings >= 0.1 * income:
+        budget_plan = "You are doing fine, but try to cut down on some
