@@ -1,0 +1,6 @@
+# Function to calculate loan payment
+def calculate_loan_payment(principal, interest_rate, years):
+    r = (interest_rate / 100) / 12
+    n = years * 12
+    payment = (r * principal) / (1 - (1 + r)**(-n))
+    return payment
