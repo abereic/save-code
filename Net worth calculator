@@ -1,0 +1,4 @@
+# Function to calculate net worth
+def calculate_net_worth(assets, liabilities):
+    net_worth = assets - liabilities
+    return net_worth
