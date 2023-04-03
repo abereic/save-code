@@ -1,0 +1,28 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy to Render
+        uses: render-inc/render-action@v1.9.0
+        with:
+          renderEmail: ${{ abereichbh@gmail.com }}
+          renderPassword: ${{ Aniitchurr#1 }}
+          renderAccountID: ${{ abereic }}
+          renderServiceID: <your-render-service-id>
